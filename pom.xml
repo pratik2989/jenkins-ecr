@@ -1,0 +1,18 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+<modelVersion>4.0.0</modelVersion>
+
+<groupId>com.devops</groupId>
+<artifactId>simple-app</artifactId>
+<version>1.0</version>
+<packaging>war</packaging>
+
+<build>
+<plugins>
+<plugin>
+<groupId>org.apache.maven.plugins</groupId>
+<artifactId>maven-war-plugin</artifactId>
+<version>3.4.0</version>
+</plugin>
+</plugins>
+</build>
+</project>
