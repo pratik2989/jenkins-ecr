@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AWS_REGION = "us-east-1"
-        ECR_REPO = "569144120195.dkr.ecr.us-east-1.amazonaws.com/java-app-repo"
+        ECR_REPO = "569144120195.dkr.ecr.us-east-1.amazonaws.com/devops-app"
         IMAGE_TAG = "latest"
     }
 
@@ -15,7 +15,7 @@ pipeline {
             }
         }
 
-        stage('Build Maven') {
+        stage('Maven Build') {
             steps {
                 sh 'mvn clean package'
             }
@@ -23,20 +23,26 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $ECR_REPO:$IMAGE_TAG .'
+                sh 'docker build -t devops-app .'
             }
         }
 
         stage('Login to ECR') {
             steps {
                 sh '''
-                aws ecr get-login-password --region $AWS_REGION | \
-                docker login --username AWS --password-stdin $ECR_REPO
+                aws ecr get-login-password --region $AWS_REGION \
+                | docker login --username AWS --password-stdin 569144120195.dkr.ecr.us-east-1.amazonaws.com
                 '''
             }
         }
 
-        stage('Push Image to ECR') {
+        stage('Tag Image') {
+            steps {
+                sh 'docker tag devops-app:latest $ECR_REPO:$IMAGE_TAG'
+            }
+        }
+
+        stage('Push Image') {
             steps {
                 sh 'docker push $ECR_REPO:$IMAGE_TAG'
             }
